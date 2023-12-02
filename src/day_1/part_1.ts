@@ -28,4 +28,4 @@ export const main = (input: string, separator: string = "\n"): number =>
 
 const input = fs.readFileSync("./src/day_1/input/input.txt", "utf8");
 
-console.log(`Part 1: ${main(input)}`);
+// console.log(`Part 1: ${main(input)}`);
