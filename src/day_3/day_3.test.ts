@@ -16,7 +16,7 @@ describe("AoC: Day 3", () => {
       "./src/day_3/input/input_sample.txt",
       "utf8",
     );
-    expect(pastOne(example)).toEqual(9402);
+    expect(pastOne(example)).toEqual(10080);
   });
   test("part 2", () => {
     const example = fs.readFileSync(
