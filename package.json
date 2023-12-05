@@ -4,8 +4,6 @@
   "main": "index.js",
   "author": "lloydrichards <lloyd.d.richards@gmail.com>",
   "license": "MIT",
-  "module": "index.ts",
-  "type": "module",
   "scripts": {
     "test": "jest"
   },
