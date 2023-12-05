@@ -1,7 +1,6 @@
 import { pipe } from "fp-ts/function";
 import * as A from "fp-ts/Array";
 import * as O from "fp-ts/Option";
-import * as fs from "fs";
 
 const splitIntoGames = (input: string): string[] => input.split("\n");
 
@@ -45,6 +44,6 @@ export const main = (input: string) =>
     A.reduce(0, (a, b) => a + b),
   );
 
-// const input = fs.readFileSync("./src/day_4/input/input.txt", "utf8");
+// const input = await Bun.file("./src/day_4/input/input.txt").text();
 
 // console.log(`Part 1: ${main(input)}`);

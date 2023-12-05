@@ -82,6 +82,6 @@ export const main = (input: string) =>
     A.reduce(0, (a, b) => a + Number(b)),
   );
 
-// const input = fs.readFileSync("./src/day_3/input/input.txt", "utf8");
+// const input = Bun.file("./src/day_3/input/input.txt");
 
 // console.log(`Part 1: ${main(input)}`);

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "bun:test";
 import { main as part1 } from "./part_1";
 import { main as part2 } from "./part_2";
 

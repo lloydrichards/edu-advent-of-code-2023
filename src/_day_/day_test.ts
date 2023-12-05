@@ -1,5 +1,5 @@
-// import { describe, expect, test } from "@jest/globals";
+// import { describe, expect, test } from "bun:test";
 
 // describe.skip("AoC: Day #", () => {
-//   test("part 1", () => {});
+//   test("part 1", async () => {});
 // });
