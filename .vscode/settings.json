@@ -1,3 +1,6 @@
 {
-  "conventionalCommits.scopes": ["advent"]
+  "conventionalCommits.scopes": [
+    "advent",
+    "fp-ts"
+  ]
 }
