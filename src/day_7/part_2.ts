@@ -140,4 +140,4 @@ export const main = (input: string) =>
     RNEA.reduceWithIndex(0, (index, acc, hand) => acc + hand.bid * (index + 1)),
   );
 
-console.log(`Part 2: ${main(input)}`); // not 249852849
+// console.log(`Part 2: ${main(input)}`); // not 249852849
