@@ -8,7 +8,17 @@ import input from "./input/input.txt";
 
 const parseInstructions: (s: string) => Instructions = flow(
   S.split("\n"),
-  RA.map(flow(S.split(" "), ([dir, steps]) => ({ dir, steps: +steps }))),
+  RA.map(
+    flow(S.split(" "), ([_, __, color]) =>
+      pipe(
+        color,
+        S.dropLeft(2),
+        S.dropRight(1),
+        S.splitAt(-1),
+        ([steps, dir]) => ({ dir, steps: parseInt(steps, 16) }),
+      ),
+    ),
+  ),
   RA.toArray,
 );
 
@@ -18,10 +28,10 @@ const nextPos = (
   [x, y]: [number, number],
   steps: number,
 ): Record<string, [number, number]> => ({
-  U: [x, y - steps],
-  D: [x, y + steps],
-  L: [x - steps, y],
-  R: [x + steps, y],
+  3: [x, y - steps],
+  1: [x, y + steps],
+  2: [x - steps, y],
+  0: [x + steps, y],
 });
 
 const processInstructions = (instructions: Instructions): [number, number][] =>
@@ -66,4 +76,4 @@ export const main = (input: string) =>
       picksTheorem(shoelaceFormula(points), parimeter) + parimeter,
   );
 
-// console.log(main(input)); // Output: 40745
+// console.log(main(input)); // Output: 90111113594927
