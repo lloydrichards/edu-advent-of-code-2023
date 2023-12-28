@@ -33,6 +33,8 @@ type ConfigState = {
   queue: Array<Pulse>;
   high: number;
   low: number;
+  rx: boolean;
+  btnPress: number;
 };
 
 const parseModule: (s: string) => [string, ModuleState] = flow(
@@ -77,14 +79,16 @@ const parseConfig = flow(
 const pulseReducer =
   (state: ConfigState) =>
   ([from, to, value]: Pulse): ConfigState => {
-    //   console.log(`${from} -${value}-> ${to}`);
+    // console.log(`${from} -${value}-> ${to}`);
     const destModule = state.config[to];
-    if (!destModule) {
+    if (to === "rx") {
       return {
         ...state,
         high: state.high + (value ? 1 : 0),
         low: state.low + (!value ? 1 : 0),
         queue: state.queue.slice(1),
+        rx: value ? false : true,
+        btnPress: state.btnPress,
       };
     }
 
@@ -98,6 +102,8 @@ const pulseReducer =
             ...state.queue.slice(1),
             ...destModule.dest.map((d) => [to, d, value] as Pulse),
           ],
+          rx: state.rx,
+          btnPress: state.btnPress + 1,
         };
       case ModuleType.FLIP_FLOP:
         if (value) {
@@ -106,6 +112,8 @@ const pulseReducer =
             high: state.high + (value ? 1 : 0),
             low: state.low + (!value ? 1 : 0),
             queue: state.queue.slice(1),
+            rx: state.rx,
+            btnPress: state.btnPress,
           };
         }
         return {
@@ -119,6 +127,8 @@ const pulseReducer =
             ...state.queue.slice(1),
             ...destModule.dest.map((d) => [to, d, !destModule.state] as Pulse),
           ],
+          rx: state.rx,
+          btnPress: state.btnPress,
         };
       case ModuleType.CONJUNCTION:
         const updatedMemory = { ...destModule.memory, [from]: value };
@@ -134,6 +144,8 @@ const pulseReducer =
               ...state.queue.slice(1),
               ...destModule.dest.map((d) => [to, d, false] as Pulse),
             ],
+            rx: state.rx,
+            btnPress: state.btnPress,
           };
         }
         return {
@@ -147,6 +159,8 @@ const pulseReducer =
             ...state.queue.slice(1),
             ...destModule.dest.map((d) => [to, d, true] as Pulse),
           ],
+          rx: state.rx,
+          btnPress: state.btnPress,
         };
     }
   };
@@ -162,20 +176,31 @@ const firePulse = (state: ConfigState): ConfigState =>
     ),
   );
 
-const pushButton = (times: number) => (config: Record<string, ModuleState>) =>
+const pushButton = (
+  config: Record<string, ModuleState>,
+  state?: ConfigState,
+): ConfigState =>
   pipe(
-    Array.from({ length: times }),
-    A.reduce({ config, high: 0, low: 0, queue: [] } as ConfigState, (state) =>
-      firePulse({ ...state, queue: [["button", "broadcaster", false]] }),
+    state || {
+      config,
+      high: 0,
+      low: 0,
+      queue: [],
+      rx: false,
+      btnPress: 0,
+    },
+    O.fromPredicate(({ rx }) => !rx),
+    O.match(
+      () => state!,
+      (state) =>
+        pushButton(
+          config,
+          firePulse({ ...state, queue: [["button", "broadcaster", false]] }),
+        ),
     ),
   );
 
-export const main = (press: number) => (input: string) =>
-  pipe(
-    input,
-    parseConfig,
-    pushButton(press),
-    ({ high, low }) => high * low,
-  );
+export const main = (input: string) =>
+  pipe(input, parseConfig, pushButton, ({ high, low }) => high * low);
 
-// console.log(main(1000)(input)); // Output: 919383692
+console.log(main(input)); // Output:

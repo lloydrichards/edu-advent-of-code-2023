@@ -11,7 +11,6 @@ import * as Ord from "fp-ts/Ord";
 import * as Sg from "fp-ts/Semigroup";
 
 import input from "./input/input.txt";
-import { ord } from "fp-ts";
 
 const parseMap = flow(
   S.split("\n"),
